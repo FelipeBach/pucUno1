@@ -1,152 +1,172 @@
+import java.io.Serializable;
 
-public class Card {
-	
-	private String cor;
+/**
+ * Essa classe implementa uma carta de UNO.
+ */
+
+public class Card implements Serializable
+{
+    private int cor;
 	private int valor;
-	private int valorEsp;
-	private boolean special;
 
-	public Card(int valor,String cor) {
-		
-		/*
-		 * constroi uma carta não especial 
-		 * seta a cor e valor numérico
-		 * seta a carta na categoria normal
-		 */
-		
-		
-		this.cor = cor;
-		this.valor = valor;
-		this.valorEsp = 0;
-		this.special = false;
+	/*
+	    Cores:
+	        0 - No color (specials)
+	        1 - Red
+	        2 - Green
+	        3 - Blue
+	        4 - Yellow
+
+	    Valor especial:
+	        10 - Pula
+	        11 - Retorno
+	        12 - Compra 2
+	        13 - Coringa (sem cor a priori)
+	        14 - Compra 4 (sem cor a priori)
+
+	 */
+
+    /**
+     * Construtor padrão de carta.
+     * @param valor valor (inteiro) da carta
+     * @param cor   a cor da carta (inteiro).
+     */
+	public Card(int valor, int cor)
+    {
+		setCor(cor);
+		setValor(valor);
 	}
-	
-	
-	public Card(int valorEsp) { // Construtor para cartas especiais como +4 e +2	
-		
-		/*
-		 * designa o valor especial para a a carta
-		 * seta a carta na categoria especiais
-		 */
-		
-		this.cor="";
-		this.valorEsp = valorEsp;
-		this.valor = 0;
-		this.special = true;
+
+    /**
+     * Muda cor da carta
+     * @param cor
+     */
+    public void setCor(int cor)
+    {
+        if(cor >= 0 && cor <= 4)
+            this.cor = cor;
+    }
+
+    /**
+     * Muda o valor da carta
+     * @param valor
+     */
+    private void setValor(int valor)
+    {
+        if(valor >= 0 && valor <=14) this.valor = valor;
+    }
+
+    /** Retorna a cor da carta*/
+    public int getColor(){
+	    return this.cor;
 	}
-	
-	public String getColor() {
-		/*
-		 * Retorna a cor da carta
-		 */
-		
-		return this.cor;
+
+    /**
+     * Devolve cor do objeto
+     * @return Cor do objeto
+     */
+	public String getColorString()
+    {
+        switch(this.cor)
+        {
+            case 1: return "red";
+            case 2: return "gre";
+            case 3: return "blu";
+            case 4: return "yel";
+            default: return "   ";
+        }
+    }
+
+    /**
+     * Retorna o valor da carta
+     * @return Valor da carta
+     */
+	public int getValue()
+    {
+        return this.valor;
 	}
-	
-	public int getValue() {
-		
-		/*
-		 * retorna o valor numérico da carta
-		 */
-		
-		if(!this.special) {
-		return this.valor;}
-		
-		else {
-			return this.valorEsp;
-		}
+
+    /**
+     * Retorna o valor da carta(inclusive se for uma ação)
+     * @return
+     */
+	public String getValueString()
+    {
+        switch(valor)
+        {
+            case 10: return "pul";
+            case 11: return "inv";
+            case 12: return "+2 ";
+            case 13: return "cur";
+            case 14: return "+4 ";
+            default: return " " + valor + " ";
+        }
+    }
+
+    /**
+     * Checa se a carta é especial.
+     * @return True se for, False se não for
+     * */
+    public boolean isSpecial() { //Como se fosse getSpecial()
+        return valor >= 10;
+    }
+
+    /**
+     * Checa se a carta é do tipo que pula a vez
+     * @return False se não for, True se for
+     */
+    public boolean isPula()
+    {
+        return valor == 10;
+    }
+
+    /**
+     *  Checa se a carta é do tipo que troca o sentido
+     * @return True se for, False se não for
+     */
+    public boolean isTrocaSentido()
+    {
+        return valor == 11;
+    }
+
+    /**
+     * Checa se a carta é do tipo coringa
+     * @return True se for, False se não for
+     */
+    public boolean isCoringa()
+    {
+        return valor >= 13;
+    }
+
+    /**
+     * Escreve na tela a cor e o valor da carta, dentro de um quadrado
+     * @return quadrado com valor e cor da carta.
+     */
+    public String toString()
+    {
+        return " ----- \n| " + this.getColorString() + " |\n| " +
+                this.getValueString() + " | \n ----- \n";
 	}
-	
-	public String toString() {
-		
-		/*
-		 * Printa a Carta.
-		 * printa [ cor - card value ] se a carta não for especial
-		 * printa [ + value ] se a carta for especial
-		 */
-		
-//		if(!special) {
-//			return "[ "+this.color+"-"+this.value+" ]";
-//		}
-//		
-//		else if(special){
-//			
-//			return "[ "+"+"+this.specialValue+" ]"; 
-//		}
-//		return null;
-		
-		String[] card = {" ----- ","|     |","|     |"," ----- "};
-		String c = "";
-		
-		
-		for(int i=0;i<card.length;i++) {
-				
-			for(int j=0;j<1;j++) {
-					
-				if(!this.isSpecial()) {
-					if(i==1) {
-						
-						c = c +"| "+this.getColor()+" |"+" ";
-						
-					}
-					
-					else if(i==2) {
-						
-						c = c + "|  "+this.getValue()+"  |"+" ";
-					}
-					
-					else {
-						c = c + card[i]+" "; 
-					}
-					
-					}
-				
-				else if(this.isSpecial()) {
-					
-					if(i==1) {
-						
-						c = c +"| "+"+"+this.getValue()+"  |"+" ";
-						
-					}
-					else {
-						c = c + card[i]+" ";
-					}
-					
-				}
-				
-					}
-				
-				c +="\n";
-				
-			}
-				
-		
-		
-		
-		return c;
-		
-		
-		
-		
-	}
-	
-	public boolean isSpecial() {
-		
-		/*
-		 * retorna true se a carta for especial
-		 * retorna true se a carta não for especial
-		 */
-		
-		
-		if(special) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	
-	
-	
-	
+
+    /**
+     * Checa se a carta do jogador pode ser combinada com a carta atual
+     * @param below carta do jogador
+     * @return True se puder, False caso contrário.
+     */
+	public boolean canPutThisAbove (Card below)
+    {
+        if (below == null) return false;
+        if (this.isCoringa()) return true;
+        return below.getColor() == this.getColor() || this.getValue() == below.getValue();
+    }
+
+    /**
+     * Checa se a carta é +2 ou +4
+     * @return O número de cartas que o jogador deve comprar
+     */
+    public int getPenalty ()
+    {
+        if (valor == 12 || valor == 14) return valor - 10;
+        return 0;
+    }
 }
